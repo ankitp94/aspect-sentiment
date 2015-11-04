@@ -7,9 +7,9 @@ from unidecode import unidecode
 import json
 import random
 
-os.environ['JAVA_HOME'] = 'C://Program Files//Java//jdk1.8.0_45//bin'
-os.environ['STANFORD_PARSER'] = 'D://stanford-parser-full-2015-04-20'
-os.environ['STANFORD_MODELS'] = 'D://stanford-parser-full-2015-04-20'
+os.environ['STANFORD_PARSER'] = '/home/asus/Downloads/parser/stanford-parser-full-2015-04-20/'
+os.environ['STANFORD_MODELS'] = '/home/asus/Downloads/parser/stanford-parser-full-2015-04-20/'
+model_path =  '/home/asus/Downloads/parser/stanford-parser-full-2015-04-20/stanford-parser-3.5.2-models/edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz'
 
 #os.environ['STANFORD_PARSER'] = '../stanford-parser-full-2015-04-20'
 #os.environ['STANFORD_MODELS'] = '../stanford-parser-full-2015-04-20'
@@ -25,13 +25,17 @@ def load(filename):
     csv_reader = csv.reader(input_file)
     data_set = {}
     for line in csv_reader:
-        review = unidecode(line[0].decode('utf-8')).lower()
-        if not all(ord(c) < 128 for c in review): pdb.set_trace()
-        if review not in data_set:
-            data_set[review] = [{'aspect': line[1], 'rating': float(line[2])}]
-        else:
-            data_set[review].append({'aspect': line[1], 'rating': float(line[2])})
+        try:
+            review = unidecode(line[0].decode('utf-8')).lower()
+            if len(review) > 150:
+                raise Exception
+            if not all(ord(c) < 128 for c in review): pdb.set_trace()
+            data_set[review] = [{'label': int(line[1])}]
+        except:
+            print "error ==> " , line
+            pass
     input_file.close()
+    print "DOne loading"
     return data_set
 
 
@@ -60,11 +64,14 @@ def dump_to_file(filename, dataset):
     return
 
 if __name__ == '__main__':
-    parser = nltk.parse.stanford.StanfordParser()
-    data_set = load('./data/final_review_set.csv')
+    parser = nltk.parse.stanford.StanfordParser(model_path=model_path)
+    data_set = load('trial.csv')
     token_set, review_set = tokenize(data_set)
     max_number = len(data_set)
+
+    print "parsing" , max_number
     forest = parse_sent(parser, token_set[:max_number])
+    print "parsing done"
     sents = []
     for tree in forest:
         sents.append(list(tree)[0])
@@ -74,8 +81,8 @@ if __name__ == '__main__':
         data.append({"tree": str(parsed_tree), "label": data_set[review][:-1]})
     train_sample = int(len(data_set) * 0.7)
     dev_sample = int(len(data_set) * 0.1)
-    test_sample = len(data_set) - train_sample - dev_sample
-    data_idx = list(range(len(data_set)))
+    test_sample = len(data_set) -1 - train_sample - dev_sample
+    data_idx = list(range(len(data_set) -1 ))
     random.seed(15)
     random.shuffle(data_idx)
     train_idx = data_idx[:train_sample]

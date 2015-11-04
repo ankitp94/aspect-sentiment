@@ -42,6 +42,10 @@ def rating_label(label_dic):
     # if label_dic['rating'] > 4: return 4
     return int(label_dic['rating']) - 1
 
+def author_label(label_dic):
+    print "label_dic" , label_dic
+    return int(label_dic["label"])
+
 
 def pair_label(label_dic):
     return aspect_label(label_dic) * len(aspect_dic) + rating_label(label_dic)

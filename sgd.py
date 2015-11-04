@@ -74,8 +74,8 @@ class SGD:
             self.model.update_params(scale, update, log=False)
 
             self.costt.append(cost)
-            if self.it % 1 == 0:
-                print "Iter %d : Cost=%.4f, ExpCost=%.4f." % (self.it, cost, self.expcost[-1])
+            # if self.it % 1 == 0:
+            #     print "Iter %d : Cost=%.4f, ExpCost=%.4f." % (self.it, cost, self.expcost[-1])
         if epoch_idx % 2 == 0:
             pass
             #self.alpha /= 1.05

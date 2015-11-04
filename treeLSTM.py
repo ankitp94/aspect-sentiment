@@ -152,6 +152,7 @@ class TreeLSTM:
 
     def forward_prop(self, tree, test=False):
         cost = self.forward_prop_node(tree.root, test)
+        # print "tree cost " , cost
         if not test:
             tree.mask = np.random.binomial(1, self.keep, self.mem_dim)
             theta = self.Ws.dot(tree.root.hActs1 * tree.mask) + self.bs

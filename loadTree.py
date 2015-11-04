@@ -4,9 +4,7 @@ import cPickle as pickle
 import nltk.tree
 
 import loadFile
-from loadFile import aspect_label
-from loadFile import rating_label
-from loadFile import pair_label
+from loadFile import author_label
 
 UNK = "UNK"
 
@@ -136,9 +134,12 @@ def load_all(data_set, label_method):
     return trees
 
 if __name__ == '__main__':
-    train = load_trees('./data/train.json', rating_label)
+    train = load_trees('./data/train.json', author_label)
     try:
         training_word_map = load_word_map()
     except IOError:
         training_word_map = build_word_map(train)
     convert_trees(train, training_word_map)
+    a = convert_trees(train, training_word_map)
+    print "a " , a
+    print "training_word_map" , training_word_map

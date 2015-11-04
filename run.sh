@@ -7,14 +7,14 @@ set -x
 ###################
 
 # training params
-epochs=15
+epochs=150
 step=5e-2
-wvecDim=30
-memDim=30
+wvecDim=40
+memDim=40
 rho=1e-5
 
-model="TreeTLSTM"
-label="pair"
+model="TreeLSTM"
+label="author"
 
 ######################################################## 
 # Probably a good idea to let items below here be
@@ -24,5 +24,5 @@ outfile="models/${model}_${label}_wvecDim_${wvecDim}_memDim_${memDim}_step_${ste
 
 echo $outfile
 
-python runNNet.py --step $step --epochs $epochs --outFile $outfile --wvecDim $wvecDim --memDim $memDim --model $model --rho $rho --label $label --minibatch 20
+python runNNet.py --step $step --epochs $epochs --outFile $outfile --wvecDim $wvecDim --memDim $memDim --model $model --rho $rho --label $label --minibatch 20 --output_dim 5
 read

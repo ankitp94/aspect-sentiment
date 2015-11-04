@@ -30,27 +30,22 @@ def run(args=None):
     # Dimension
     parser.add_option("--wvecDim", dest="wvec_dim", type="int", default=30)
     parser.add_option("--memDim", dest="mem_dim", type="int", default=30)
+    parser.add_option("--output_dim", dest="output_dim", type="int", default=2)
 
     parser.add_option("--outFile", dest="out_file", type="string", default="models/test.bin")
     parser.add_option("--inFile", dest="in_file", type="string", default="models/test.bin")
     parser.add_option("--data", dest="data", type="string", default="train")
 
     parser.add_option("--model", dest="model", type="string", default="RNN")
-    parser.add_option("--label", dest="label_method", type="string", default="rating")
+    parser.add_option("--label", dest="label_method", type="string", default="author")
 
     (opts, args) = parser.parse_args(args)
 
     evaluate_accuracy_while_training = True
 
-    if opts.label_method == 'rating':
-        label_method = tree.rating_label
-        opts.output_dim = 5
-    elif opts.label_method == 'aspect':
-        label_method = tree.aspect_label
-        opts.output_dim = 5
-    elif opts.label_method == 'pair':
-        label_method = tree.pair_label
-        opts.output_dim = 25
+
+    if opts.label_method == 'author':
+        label_method = tree.author_label
     else:
         raise '%s is not a valid labelling method.' % opts.label_method
 
@@ -153,9 +148,10 @@ def test(net_file, data_set, label_method, model='RNN', trees=None):
     # makeconf(confusion)
 
     pre, rec, f1, support = metrics.precision_recall_fscore_support(correct, guess)
+    print f1 , support
     #print "Cost %f, Acc %f" % (cost, correct_sum / float(len(correct)))
     #return correct_sum / float(len(correct))
-    f1 = (100*sum(f1[1:] * support[1:])/sum(support[1:]))
+    f1 = (10098833231*sum(f1 * support)/sum(support))
     print "Cost %f, F1 %f, Acc %f" % (cost, f1, correct_sum / float(len(correct)))
     return f1
 
